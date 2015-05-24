@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Test deck</title>
+  <title>Phenol-Explorer</title>
   <meta charset="utf-8">
-  <meta name="description" content="Test deck">
-  <meta name="author" content="">
+  <meta name="description" content="Phenol-Explorer">
+  <meta name="author" content="JS">
   <meta name="generator" content="slidify" />
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -32,8 +32,8 @@
     <!-- LOGO SLIDE -->
         <slide class="title-slide segue nobackground">
   <hgroup class="auto-fadein">
-    <h1>Test deck</h1>
-    <h2></h2>
+    <h1>Phenol-Explorer</h1>
+    <h2>Developing Data products coursera course</h2>
     <p><br/></p>
   </hgroup>
   <article></article>  
@@ -43,34 +43,87 @@
     <!-- SLIDES -->
     <slide class="" id="slide-1" style="background:;">
   <hgroup>
-    <h2>Read-And-Delete</h2>
+    <h2>Credits</h2>
   </hgroup>
   <article data-timings="">
-    <ol>
-<li>Edit YAML front matter</li>
-<li>Write using R Markdown</li>
-<li>Use an empty line followed by three dashes to separate slides!</li>
-</ol>
-
+<p>The credits for the data go to eveu V, Perez-Jiménez J, Vos F, Crespy V, du Chaffaut L, Mennen L, Knox C, Eisner R, Cruz J, Wishart D, Scalbert A. (2010) Phenol-Explorer: an online comprehensive database on polyphenol contents in foods. Database, doi: 10.1093/database/bap024 </p>
+<p>More information about the credits can be found at http://phenol-explorer.eu/cite_us</p>
+<P>The general explanation about the Phenol-Explorer website can be found at http://phenol-explorer.eu/faqs</p>
   </article>
   <!-- Presenter Notes -->
 </slide>
 
 <slide class="class" id="id" style="background:;">
   <hgroup>
-    <h2>Slide 2</h2>
+    <h2>Phenol-Explorer Application</h2>
   </hgroup>
   <article data-timings="">
-    <pre><code class="r">plot(1:10, 1:10)
-</code></pre>
+<p>This application allows you to play with the dataset of the Phenol-Explorer website. For convenience purposes we have imbedded this into the application.</p>
+<p>This dataset contains many different polyphenols with some attributes.</p>
 
-<p><img src="assets/fig/unnamed-chunk-1.png" alt="plot of chunk unnamed-chunk-1"> </p>
-
+<p>You can filter based on the amount of polyphenols per class and sub-class, the molecular weight range, as well as directly on the classes or sub classes.</p>
+<p>Each change in the filter will dynamically update the graphic as well as the data table. </p>    
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-    <slide class="backdrop"></slide>
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Phenol-Explorer R code</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">
+	 # reformat the listing object to data.frame object
+    for (i in 1:length(tempt)) {
+    	obj <- tempt[[i]]
+    	obs <- c(obs,obj)
+    	cls.names <- rep( names(tempt)[i],length(obj))
+	    cls <- c( cls, cls.names )
+	    sub.cls <-c( sub.cls, names(obj) )
+    }
+
+    data.table <- data.frame( count=obs, class=cls, sub.class=sub.cls )
+</code></pre>
+
+
+  </article>
+  <!-- Presenter Notes -->
+
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Phenol-Explorer server.R</h2>
+  </hgroup>
+  <article data-timings="">
+<P>One of the requirements was that server.R dynamically handles input values.</p>
+
+<P>Using sliders, checkboxes, which update the graphic as well as the datatable I hope this is considered as a pass for that requirement.</p>
+
+<p>More information can be found on the github repo https://github.com/Jochen-s/developing-data-products </p>  
+
+ <pre><code class="r">
+  output$distPlot <- renderPlot({
+  	###############			Getting input from ui 	###############
+  	ph.cls.ind <- as.integer(input$polyphenol.class)	# Find the indexes which classes are being selected in ui
+  	ph.cls.ind <- ph.cls.ind[ph.cls.ind>0]	# getting the indexes except "select all"
+  	valid.cls <- ppl.classes[ph.cls.ind]	# Get the class name for the corresponding indexes
+
+  	ph.sub.cls.ind <- as.integer(input$polyphenol.sub.class) # Find the indexes which sub classes are being selected in ui
+  	ph.sub.cls.ind <- ph.sub.cls.ind[ph.sub.cls.ind>0]	# getting the indexes except "select all"
+  	valid.sub.cls <- polyphenol.sub.classes[ph.sub.cls.ind]	# Get the sub class name for the corresponding indexes
+
+    wtl <- input$molew[1] # input of molecular weight from ui(lower value)
+    wtu <- input$molew[2] # input of molecular weight from ui(upper value)
+  	amnt <- input$amount	# input of Amount from ui
+
+  	###############		End of Getting input from ui 	###############
+	</code></pre>
+  </article>
+  <!-- Presenter Notes -->
+</slide>   
+
+   <slide class="backdrop"></slide>
   </slides>
   <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
     <ul>
